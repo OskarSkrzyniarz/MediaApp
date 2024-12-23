@@ -1,0 +1,57 @@
+version: '3.9'
+services:
+  postapi:
+    image: postapi
+    build:
+      context: .
+      dockerfile: PostAPI/Dockerfile
+    ports:
+      - "5002:5002"
+    environment:
+      - ASPNETCORE_URLS=http://+:5002
+      - ConnectionStrings__DefaultConnection=Server=appDB;Database=PostDB;User=sa;Password=YourStrong@Passw0rd
+    depends_on:
+      - appDB
+
+  peopleapi:
+    image: peopleapi
+    build:
+      context: .
+      dockerfile: PeopleAPI/Dockerfile
+    ports:
+      - "5003:5003"
+    environment:
+      - ASPNETCORE_URLS=http://+:5003
+      - ConnectionStrings__DefaultConnection=Server=appDB;Database=PeopleDB;User=sa;Password=YourStrong@Passw0rd
+    depends_on:
+      - appDB
+
+  identityapi:
+    image: identityapi
+    build:
+      context: .
+      dockerfile: IdentityAPI/Dockerfile
+    ports:
+      - "5004:5004"
+    environment:
+      - ASPNETCORE_URLS=http://+:5004
+      - ConnectionStrings__DefaultConnection=Server=appDB;Database=IdentityDB;User=sa;Password=YourStrong@Passw0rd
+    depends_on:
+      - appDB
+
+  socialmediaapp:
+    image: socialmediaapp
+    build:
+      context: ./socialmediareactapp
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+
+
+  appDB:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      SA_PASSWORD: "YourStrong@Passw0rd"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1435:1433"

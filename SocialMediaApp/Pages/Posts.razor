@@ -1,0 +1,21 @@
+﻿@page "/posts"
+
+@using SocialMediaApp.Models
+@using SocialMediaApp.Services
+@inject PostService PostService
+@code {
+    private List<Post> posts = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        posts = await PostService.GetAllPosts();
+    }
+}
+
+<h3>All Posts</h3>
+<ul>
+    @foreach (var post in posts)
+    {
+        <li>@post.Title - @post.Content</li>
+    }
+</ul>

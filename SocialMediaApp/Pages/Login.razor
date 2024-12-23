@@ -1,0 +1,29 @@
+﻿@page "/"
+
+@using SocialMediaApp.Services
+@inject AuthenticationService AuthService
+@code {
+    private string username;
+    private string password;
+    private bool isLogin = true;
+
+    private async Task HandleAuth()
+    {
+        if (isLogin)
+        {
+            var result = await AuthService.Login(username, password);
+            if (!result) Console.WriteLine("Login failed");
+        }
+        else
+        {
+            var result = await AuthService.Register(username, password);
+            if (!result) Console.WriteLine("Registration failed");
+        }
+    }
+}
+
+<h3>@(isLogin ? "Login" : "Register")</h3>
+<input @bind="username" placeholder="Username" />
+<input @bind="password" placeholder="Password" type="password" />
+<button @onclick="HandleAuth">Submit</button>
+<button @onclick="() => isLogin = !isLogin">Switch to @(isLogin ? "Register" : "Login")</button>
