@@ -1,15 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import './App.css';
-import Posts from './components/Posts.jsx';
-import People from './components/People.jsx';
+import SocialMediaApp from './components/SocialMediaApp.jsx';
 import Login from './components/Login.jsx';
 
 const App = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [token, setToken] = useState('');
 
-    const handleLogin = () => setIsLoggedIn(true);
-    const handleLogout = () => setIsLoggedIn(false);
+    const handleLogin = (jwtToken) => {
+        setIsLoggedIn(true);
+        setToken(jwtToken);
+    };
+
+    const handleLogout = () => {
+        setIsLoggedIn(false);
+        setToken('');
+    };
 
     return (
         <div className="App">
@@ -23,8 +29,7 @@ const App = () => {
             </header>
             {isLoggedIn && (
                 <main>
-                    <Posts />
-                    <People />
+                    <SocialMediaApp token={token} />
                 </main>
             )}
         </div>

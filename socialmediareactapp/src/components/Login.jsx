@@ -4,6 +4,7 @@ import axios from 'axios';
 const Login = ({ onLogin }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -13,9 +14,11 @@ const Login = ({ onLogin }) => {
         })
             .then(response => {
                 console.log('Login successful:', response.data);
+                onLogin(response.data.token); // Pass the token to the parent component
             })
-            .catch(error => {
-                console.error('Login failed:', error);
+            .catch(err => {
+                console.error('Login failed:', err);
+                setError('Invalid username or password');
             });
     };
 
@@ -34,6 +37,7 @@ const Login = ({ onLogin }) => {
                 onChange={e => setPassword(e.target.value)}
             />
             <button type="submit">Login</button>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
         </form>
     );
 };

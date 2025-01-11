@@ -8,6 +8,15 @@ using System.Collections.Generic;
 using System.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 
 // Configure services
 builder.Services.AddDbContext<PostDbContext>(options =>
@@ -36,6 +45,7 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure middleware
+app.UseCors();
 app.UseRouting();
 app.UseEndpoints(endpoints =>
 {

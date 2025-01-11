@@ -10,6 +10,15 @@ using System.Linq;
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure services
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 builder.Services.AddDbContext<PeopleDbContext>(options =>
     options.UseSqlServer("Server=appDB;Database=PeopleDB;User=sa;Password=YourStrong@Passw0rd;;TrustServerCertificate=True;"));
 builder.Services.AddControllers();
@@ -34,6 +43,7 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure middleware
+app.UseCors();
 app.UseRouting();
 app.UseEndpoints(endpoints =>
 {
